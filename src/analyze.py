@@ -31,7 +31,7 @@ for file_name in os.listdir(VOTES_FOLDER):
         if data != None:
             [name, data] = data.split('\n', 1)
             print('loading: ' + name + '\n')
-            vote_data_strings.append(data)
+            vote_data_strings.append((name, data))
 
 print('loaded ' + str(len(vote_data_strings)) + ' voting records')
 
@@ -59,7 +59,7 @@ def bts(b):
 def vvalid(vote):
     return vote == "Yea" or vote == "Nay"
 
-for raw in vote_data_strings:
+for (vote_name, raw) in vote_data_strings:
     vote_data = pandas.read_csv(StringIO(raw), sep=',')
     vote_data = vote_data.drop(columns=['person', 'state', 'district'])
     repubs_raw = vote_data[vote_data['party'].str.contains("Republican")]
@@ -119,6 +119,14 @@ for raw in vote_data_strings:
             continue
         dci = dci + ideology[name]
 
+    vote_results.append((vote_name, len(against), dci))
+
+print('\n')
+print('============================ RESULTS ============================')
+print()
+
+for (name, against, dci) in vote_results:
+    print('Vote: ' + str(name))
+    print('Against Party Lines: ' + str(against))
+    print('With DCI: ' + str(dci))
     print()
-    print('Amount against: ' + str(len(against)))
-    print('Amount against with differing constituent ideology: ' + str(dci))
