@@ -20,7 +20,11 @@ print('\nloading vote data...\n')
 
 vote_data_strings = []
 
-files = sorted(os.listdir(VOTES_FOLDER), key=os.path.getctime)
+
+def lookup(file):
+    return os.path.getctime(VOTES_FOLDER + '/' + file)
+
+files = sorted(os.listdir(VOTES_FOLDER), key=lookup)
 
 for file_name in files:
     # check to make sure it's not a bogus operating system file
