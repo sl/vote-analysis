@@ -20,7 +20,9 @@ print('\nloading vote data...\n')
 
 vote_data_strings = []
 
-for file_name in os.listdir(VOTES_FOLDER):
+files = sorted(os.listdir(VOTES_FOLDER), key=os.path.getctime)
+
+for file_name in files:
     # check to make sure it's not a bogus operating system file
     if file_name.endswith('.csv'):
         data = None
