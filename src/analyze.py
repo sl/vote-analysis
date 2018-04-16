@@ -97,15 +97,23 @@ for (vote_name, raw) in vote_data_strings:
     dem_vote = demyes > demno
     repub_vote = repubyes > repubno
 
+    total_votes = demyes + demno + repubyes + repubno
+
     dem_against = []
+    dem_with = []
     for [vote, name, party] in dems:
         if bts(dem_vote) != vote and vvalid(vote):
             dem_against.append(name)
+        elif vvalid(vote):
+            dem_with.append(name)
 
     repub_against = []
+    repub_with = []
     for [vote, name, party] in repubs:
         if bts(repub_vote) != vote and vvalid(vote):
             repub_against.append(name)
+        elif vvalid(vote):
+            repub_with.append(name)
 
     print('democrats against:')
     print(dem_against)
@@ -125,14 +133,27 @@ for (vote_name, raw) in vote_data_strings:
             continue
         dci = dci + ideology[name]
 
-    vote_results.append((vote_name, len(against), dci))
+    with_party = dem_with + repub_with
+
+    dci_with = 0
+    for name in with_party:
+        if not name in ideology:
+            print('WARNING: Found no ideology lookup for "' + name + '"')
+            continue
+        dci_with = dci_with + ideology[name]
+
+    along = total_votes - len(against)
+
+    vote_results.append((vote_name, len(against), dci, along, dci_with))
 
 print('\n')
 print('============================ RESULTS ============================')
 print()
 
-for (name, against, dci) in vote_results:
+for (name, against, dci_against, along, dci_with) in vote_results:
     print('Vote: ' + str(name))
     print('Against Party Lines: ' + str(against))
-    print('With DCI: ' + str(dci))
+    print('With DCI: ' + str(dci_against))
+    print('Along party lines: ' + str(along))
+    print('With DCI: ' + str(dci_with))
     print()
