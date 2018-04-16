@@ -21,10 +21,14 @@ print('\nloading vote data...\n')
 vote_data_strings = []
 
 
-def lookup(file):
-    return os.path.getctime(VOTES_FOLDER + '/' + file)
+all_files = os.listdir(VOTES_FOLDER)
+csv_files = [file for file in all_files if file.endswith('.csv')]
 
-files = sorted(os.listdir(VOTES_FOLDER), key=lookup)
+def lookup(file):
+    res = int(file.split('.')[0])
+    return res
+
+files = sorted(csv_files, key=lookup)
 
 for file_name in files:
     # check to make sure it's not a bogus operating system file
