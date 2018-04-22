@@ -154,10 +154,18 @@ print('\n')
 print('============================ RESULTS ============================')
 print()
 
-for (name, against, dci_against, along, dci_with) in vote_results:
-    print('Vote: ' + str(name))
-    print('Against Party Lines: ' + str(against))
-    print('With DCI: ' + str(dci_against))
-    print('Along party lines: ' + str(along))
-    print('With DCI: ' + str(dci_with))
-    print()
+with open('results.csv', 'w+') as out_file:
+
+    file_str = 'against,againstdci,along,alongdci\n'
+
+    for (name, against, dci_against, along, dci_with) in vote_results:
+        print('Vote: ' + str(name))
+        print('Against Party Lines: ' + str(against))
+        print('With DCI: ' + str(dci_against))
+        print('Along party lines: ' + str(along))
+        print('With DCI: ' + str(dci_with))
+        print()
+        file_str = file_str + '{0},{1},{2},{3}\n'.format(
+            str(against), str(dci_against), str(along), str(dci_with))
+
+    out_file.write(file_str)
